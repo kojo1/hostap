@@ -285,13 +285,16 @@ eap_pwd_perform_commit_exchange(struct eap_sm *sm, struct eap_pwd_data *data,
 		wpa_printf(MSG_INFO, "EAP-PWD (peer): scalar allocation fail");
 		goto fin;
 	}
-
+  /*
 	if (!EC_GROUP_get_cofactor(data->grp->group, cofactor, NULL)) {
 		wpa_printf(MSG_INFO, "EAP-pwd (peer): unable to get cofactor "
 			   "for curve");
 		goto fin;
 	}
-
+  */
+#ifndef WOLFSSL_NGINX
+  BN_one(cofactor);
+#endif
 	BN_rand_range(data->private_value, data->grp->order);
 	BN_rand_range(mask, data->grp->order);
 	BN_add(data->my_scalar, data->private_value, mask);

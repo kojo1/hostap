@@ -12,6 +12,7 @@
 #include "crypto/crypto.h"
 #include "eap_defs.h"
 #include "eap_pwd_common.h"
+#include <openssl/ec.h>
 
 /* The random function H(x) = HMAC-SHA256(0^32, x) */
 struct crypto_hash * eap_pwd_h_init(void)

@@ -1,0 +1,36 @@
+How to Compile and install hostap/wpa-supplicant with wolfSSL
+
+1. Install packages
+(On Ubuntu 16.04 LTS)
+# apt install binutils-dev libnl-genl-3-dev libpcap0.8 libpcap0.8-dev libiberty-dev
+
+2. Compile and install wolfSSL library(version 3.13.0).
+
+# cd (wolfSSL source dir)
+# ./autogen.sh
+# ./configure --enable-opensslextra --enable-des3 --enable-dsa --enable-arc4  --enable-savesession --enable-session-ticket --enable-wpas --enable-ecc --enable-ecc-encrypt --enable-ecccustcurves C_EXTRA_FLAGS="-DWOLFSSL_AES_COUNTER -DWOLFSSL_AES_DIRECT -DWOLFSSL_ALWAYS_VERIFY_CB -DWOLFSSL_DES_ECB"
+# make; make install
+
+3. Compile and install hostapd
+
+# cd hostapd
+# cp config-example-wolfssl .config
+# vi .config
+CONFIG_TLS=wolfssl
+TLS_FUNCS=y
+CFLAGS += -I/usr/local/include -include /usr/local/include/wolfssl/options.h -DCONFIG_DES
+(Please change wolfssl include path if you don't install default path.)
+...
+# make clean;make;make install
+
+4. Compile and install wpa-supplicant
+
+# cd wpa_supplicant
+# cp config-example-wolfssl .config
+# vi .config
+CONFIG_TLS=wolfssl
+TLS_FUNCS=y
+CFLAGS += -I/usr/local/include -include /usr/local/include/wolfssl/options.h -DCONFIG_DES
+(Please change wolfssl include path if you don't install default path.)
+...
+# make clean;make;make install

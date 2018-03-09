@@ -72,7 +72,7 @@ OBJS += inject.o
 OBJS += wep.o
 OBJS += bip.o
 
-LIBS += -lpcap
+LIBS += -lpcap -lbfd
 
 TOBJS += test_vectors.o
 TOBJS += crc32.o
