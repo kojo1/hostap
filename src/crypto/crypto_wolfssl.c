@@ -42,6 +42,10 @@
 #include <wolfssl/wolfcrypt/ecc.h>
 #include <wolfssl/openssl/bn.h>
 
+#ifdef NO_OLD_SHA_NAMES
+#define SHA  WC_SHA
+#define SHA256 WC_SHA256
+#endif
 
 #ifndef CONFIG_FIPS
 int md4_vector(size_t num_elem, const u8 *addr[], const size_t *len, u8 *mac)
@@ -163,7 +167,9 @@ int hmac_sha1(const u8 *key, size_t key_len, const u8 *data, size_t data_len,
 }
 
 #ifdef CONFIG_SHA256
-
+#ifndef SHA256
+#define SHA256 WC_SHA256
+#endif /* SHA256 */
 int hmac_sha256_vector(const u8 *key, size_t key_len, size_t num_elem,
                        const u8 *addr[], const size_t *len, u8 *mac)
 {
@@ -367,10 +373,10 @@ int aes_wrap(const u8 *kek, int n, const u8 *plain, u8 *cipher)
     return ret != (n + 1) * 8 ? -1 : 0;
 }
 
-int aes_unwrap(const u8 *kek, int n, const u8 *cipher,
+int aes_unwrap(const u8 *kek, size_t kek_len, int n, const u8 *cipher,
                u8 *plain)
 {
-    int ret = wc_AesKeyUnWrap(kek, AES_KEY_LEN, cipher, (n + 1) * 8, plain, n * 8,
+    int ret = wc_AesKeyUnWrap(kek, kek_len, cipher, (n + 1) * 8, plain, n * 8,
                               NULL);
     return ret != n * 8 ? -1 : 0;
 }
