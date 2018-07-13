@@ -373,10 +373,9 @@ int aes_wrap(const u8 *kek, int n, const u8 *plain, u8 *cipher)
     return ret != (n + 1) * 8 ? -1 : 0;
 }
 
-int aes_unwrap(const u8 *kek, size_t kek_len, int n, const u8 *cipher,
-               u8 *plain)
+int aes_unwrap(const u8 *kek, int n, const u8 *cipher, u8 *plain)
 {
-    int ret = wc_AesKeyUnWrap(kek, kek_len, cipher, (n + 1) * 8, plain, n * 8,
+    int ret = wc_AesKeyUnWrap(kek, AES_KEY_LEN, cipher, (n + 1) * 8, plain, n * 8,
                               NULL);
     return ret != n * 8 ? -1 : 0;
 }
